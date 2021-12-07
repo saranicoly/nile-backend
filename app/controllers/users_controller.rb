@@ -1,4 +1,4 @@
-class UserController < ApplicationController
+class UsersController < ApplicationController
     def create
         require "google/cloud/firestore"
         firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
