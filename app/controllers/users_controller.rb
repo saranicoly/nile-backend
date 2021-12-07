@@ -2,9 +2,12 @@ class UsersController < ApplicationController
     def create
         require "google/cloud/firestore"
         firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
-        doc_ref = firestore.doc "users/"
 
-        doc_ref.set(JSON.parse(request.raw_post))
+        params = JSON.parse request.body.read
+        doc_ref = firestore.doc "users/#{params['id']}"
+        doc_ref.set(params)
+
+        render json: params
     end
 
     def index
@@ -30,6 +33,6 @@ class UsersController < ApplicationController
 
         user = users.get(params[:id]).data
 
-        render json: user
+        return user
     end
 end
