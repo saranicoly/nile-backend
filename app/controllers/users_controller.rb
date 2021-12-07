@@ -14,10 +14,22 @@ class UsersController < ApplicationController
         firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
         users = firestore.col "users"
 
-        test = users.get.map do |user|
+        all_users = users.get.map do |user|
             user.data
         end
 
-        render json: test
+        render json: all_users
+    end
+
+    def show
+        # return a single user
+        require "google/cloud/firestore"
+
+        firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
+        users = firestore.col "users"
+
+        user = users.get(params[:id]).data
+
+        render json: user
     end
 end
