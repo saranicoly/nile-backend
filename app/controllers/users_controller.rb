@@ -30,9 +30,18 @@ class UsersController < ApplicationController
 
         firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
         users = firestore.col "users"
+        user_by_id = user_by_id(users)
 
-        user = users.get(params[:id]).data
+        render json: user_by_id
+    end
 
-        return user
+    private
+
+    def user_by_id(users)
+        users.get do |user|
+            return user.data if user.document_id == params[:id]
+        end
+        # return null if no user is found
+        return nil
     end
 end
