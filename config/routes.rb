@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   resources :users, only: [:create, :index, :show, :update]
+  get 'dashboard/weekly_measure', controller: 'dashboard', action: 'weekly_measure'
+  get 'dashboard/last_measure', controller: 'dashboard', action: 'last_measure'
 end
