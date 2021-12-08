@@ -1,0 +1,1 @@
+web: GOOGLE_APPLICATION_CREDENTIALS="/Users/baptistella/Projetos/nile/nile-backend/keyfile.json" rails s
