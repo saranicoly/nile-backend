@@ -1,8 +1,6 @@
 class DashboardController < ApplicationController
     def last_measure
-        require "google/cloud/firestore"
-
-        firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
+        firestore = firebase_connection
         measured_data = firestore.col "device_data"
 
         measured_data = measured_data.get.map do |measure|
