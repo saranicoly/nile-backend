@@ -32,7 +32,16 @@ class UsersController < ApplicationController
         users = firestore.col "users"
         user_by_id = user_by_id(users)
 
-        render json: user_by_id
+        user_by_id.nil? ? render(json: {error: "User not found"}, status: 404) : render(json: user_by_id)
+    end
+
+    def update
+        require "google/cloud/firestore"
+        firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
+
+        users = firestore.col "users"
+        user_by_id = user_by_id(users)
+        user_by_id.nil? ? render(json: {error: "User not found"}, status: 404) : create
     end
 
     private
