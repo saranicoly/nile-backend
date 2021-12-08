@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
     def create
-        require "google/cloud/firestore"
-        firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
+        firestore = firebase_connection
 
         params = JSON.parse request.body.read
         doc_ref = firestore.doc "users/#{params['id']}"
@@ -12,11 +11,6 @@ class UsersController < ApplicationController
 
     def index
         # return an array with all the users
-        require "google/cloud/firestore"
-
-        firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
-        users = firestore.col "users"
-
         all_users = users.get.map do |user|
             user.data
         end
@@ -26,20 +20,12 @@ class UsersController < ApplicationController
 
     def show
         # return a single user
-        require "google/cloud/firestore"
-
-        firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
-        users = firestore.col "users"
         user_by_id = user_by_id(users)
 
         user_by_id.nil? ? render(json: {error: "User not found"}, status: 404) : render(json: user_by_id)
     end
 
     def update
-        require "google/cloud/firestore"
-        firestore = Google::Cloud::Firestore.new project_id: "nile-2ae8a"
-
-        users = firestore.col "users"
         user_by_id = user_by_id(users)
         user_by_id.nil? ? render(json: {error: "User not found"}, status: 404) : create
     end
@@ -52,5 +38,11 @@ class UsersController < ApplicationController
         end
         # return null if no user is found
         return nil
+    end
+
+    def users
+        firestore = firebase_connection
+
+        return firestore.col "users"
     end
 end
