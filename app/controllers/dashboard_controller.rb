@@ -1,12 +1,15 @@
 class DashboardController < ApplicationController
     def last_measure
+        response.set_header("Access-Control-Allow-Origin", "*")
+
         render json: data.last
     end
 
     def weekly_measure
         weekly_measure = []
         data.reverse.each_with_index { | measure, index | index < 5 ? weekly_measure << measure : break }
-
+        
+        response.set_header("Access-Control-Allow-Origin", "*")
         render json: weekly_measure
     end
 

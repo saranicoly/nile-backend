@@ -22,6 +22,7 @@ class UsersController < ApplicationController
         # return a single user
         user_by_id = user_by_id(users)
 
+        response.set_header("Access-Control-Allow-Origin", "*")
         user_by_id.nil? ? render(json: {error: "User not found"}, status: 404) : render(json: user_by_id)
     end
 
