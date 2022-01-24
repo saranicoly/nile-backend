@@ -29,8 +29,19 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # firebase
 gem "google-cloud-firestore"
 
+<<<<<<< HEAD
 #cors
 gem 'rack-cors', :require => 'rack/cors'
+=======
+gem 'spring'
+
+gem 'rails_12factor', group: :production
+
+gem 'sqlite3', group: [:development, :test]
+
+gem 'rails_12factor', group: :production
+gem 'pg', group: :production
+>>>>>>> 740eaeaf2b0687532fd0ee2bad504cce2f46fe52
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
