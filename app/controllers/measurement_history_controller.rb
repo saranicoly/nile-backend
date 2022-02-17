@@ -41,9 +41,9 @@ class MeasurementHistoryController < ApplicationController
           # Escreve o texto do contrato com o tamanho de 14 PDF points, com o alinhamento justify
           table_data = [["Date", "Sensor", "Value"]]
           table_data += measure_history
-          pdf.table(table_data, :header => true)
+          pdf.table(table_data, :header => true, :width => 500, :row_colors => ["F0F0F0", "FFFFFF"])
           # Inclui em baixo da folha do lado direito a data e o némero da página usando a tag page
-          pdf.number_pages "Generated: #{(Time.now).strftime("%d/%m/%y as %H:%M")} - Página ", :start_count_at => 0, :page_filter => :all, :at => [pdf.bounds.right - 140, 7], :align => :right, :size => 8
+          pdf.number_pages "Generated: #{(Time.now).strftime("%d/%m/%y at %H:%M")}", :page_filter => :all, :at => [pdf.bounds.right - 140, 7], :align => :right, :size => 8
           # Gera no nosso PDF e coloca na pasta public com o nome agreement.pdf
           pdf.render_file('public/measurements_history.pdf')
         end
