@@ -37,7 +37,14 @@ class MonthlyReportController < ApplicationController
                 pdf.rectangle [0, pdf.cursor], 180, 180
                 pdf.rectangle [250, pdf.cursor], 180, 180
             end
-            # pdf.draw_text "Temperature", :size => 14, :style => :bold, :at => [0, 50]
+            pdf.draw_text "Temperature", :size => 14, :style => :bold, :at => [50, 225]
+            pdf.text_box "* The temperature of your tank is stable", :size => 14, :at => [10, 190], :width => 140, :align => :justify
+            pdf.draw_text "PH", :size => 14, :style => :bold, :at => [322, 225]
+            pdf.text_box "* The PH of your tank is stable", :size => 14, :at => [260, 190], :width => 140, :align => :justify
+            pdf.draw_text "Dissolved Oxygen", :size => 14, :style => :bold, :at => [32, 505]
+            pdf.text_box "* You should take a look on the dissolved oxygen levels. Your fishes may not have oxygen enough to live.", :size => 14, :at => [10, 470], :width => 140, :align => :justify
+            pdf.draw_text "Turbidity", :size => 14, :style => :bold, :at => [309, 505]
+            pdf.text_box "* The turbidity of your tank is stable", :size => 14, :at => [260, 470], :width => 140, :align => :justify
             # Inclui em baixo da folha do lado direito a data e o némero da página usando a tag page
             pdf.number_pages "Generated: #{(Time.now).strftime("%d/%m/%y at %H:%M")}", :page_filter => :all, :at => [pdf.bounds.right - 140, 7], :align => :right, :size => 8
             # Gera no nosso PDF e coloca na pasta public com o nome agreement.pdf
