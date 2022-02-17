@@ -1,0 +1,2 @@
+class MeasurementHistoryController < ApplicationController
+end
