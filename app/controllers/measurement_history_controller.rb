@@ -1,22 +1,24 @@
 class MeasurementHistoryController < ApplicationController
-    require 'prawn'
     require 'prawn/table'
+    require 'prawn'
 
     def index
         measure_history = []
+        count = 0
         data.reverse.each do | measure |
-            measurement_date = measure[:datetime].to_datetime.strftime("%d/%m/%Y %H:%M")
-            measure.map do | key, value |
-                unless key == :datetime
-                    measure_history << [measurement_date, key, value]
+            count += 1
+            unless count > 40
+                measurement_date = measure[:datetime].to_datetime.strftime("%d/%m/%Y %H:%M")
+                measure.map do | key, value |
+                    unless key == :datetime
+                        measure_history << [measurement_date, key.to_s, value.to_s]
+                    end
                 end
             end
         end
-        # puts weekly_measure
-        render json: weekly_measure
 
-        # generate_pdf
-        # redirect_to '/measurements_history.pdf'
+        generate_pdf(measure_history)
+        redirect_to '/measurements_history.pdf'
     end
 
     private
@@ -28,10 +30,7 @@ class MeasurementHistoryController < ApplicationController
         return measured_data.get.map { |measure| measure.data }.sort_by { |measure| measure[:datetime] }
     end
 
-    def generate_pdf
-        # Apenas uma string aleatório para termos um corpo de texto pro contrato
-        lorem_ipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum nulla id dignissim iaculis. Vestibulum a egestas elit, vitae feugiat velit. Vestibulum consectetur non neque sit amet tristique. Maecenas sollicitudin enim elit, in auctor ligula facilisis sit amet. Fusce imperdiet risus sed bibendum hendrerit. Sed vitae ante sit amet sapien aliquam consequat. Duis sed magna dignissim, lobortis tortor nec, suscipit velit. Nulla sit amet fringilla nisl. Integer tempor mauris vitae augue lobortis posuere. Ut quis tellus purus. Nullam dolor mauris, egestas varius ligula non, cursus faucibus orci sectetur non neque sit amet tristique. Maecenas sollicitudin enim elit, in auctor ligula facilisis sit amet. Fusce imperdiet risus sed bibendum hendrerit. Sed vitae ante sit amet sapien aliquam consequat."
-    
+    def generate_pdf(measure_history)
         Prawn::Document.new(pdf_options = {:page_size => "A4", :page_layout => :portrait, :margin => [40, 75]}) do |pdf|
           # Define a cor do traçado
           pdf.fill_color "666666"
@@ -40,7 +39,9 @@ class MeasurementHistoryController < ApplicationController
           # Move 80 PDF points para baixo o cursor
           pdf.move_down 80
           # Escreve o texto do contrato com o tamanho de 14 PDF points, com o alinhamento justify
-          pdf.text "#{lorem_ipsum}", :size => 12, :align => :justify, :inline_format => true
+          table_data = [["Date", "Sensor", "Value"]]
+          table_data += measure_history
+          pdf.table(table_data, :header => true)
           # Inclui em baixo da folha do lado direito a data e o némero da página usando a tag page
           pdf.number_pages "Generated: #{(Time.now).strftime("%d/%m/%y as %H:%M")} - Página ", :start_count_at => 0, :page_filter => :all, :at => [pdf.bounds.right - 140, 7], :align => :right, :size => 8
           # Gera no nosso PDF e coloca na pasta public com o nome agreement.pdf

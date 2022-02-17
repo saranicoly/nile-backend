@@ -40,7 +40,7 @@ gem 'sqlite3', group: [:development, :test]
 gem 'rails_12factor', group: :production
 
 # gem para gerar o pdf
-gem 'prawn-rails'
+gem 'prawn'
 gem 'prawn-table'
 
 group :development, :test do
